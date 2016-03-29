@@ -1,0 +1,25 @@
+<package type="studio" name="sid.ulr" version="0.0.0-SNAPSHOT">
+  <title>SID ULR</title>
+  <description></description>
+  <vendor>Studio</vendor>
+  <hotreload-support>false</hotreload-support>
+  <supported>false</supported>
+  <require-terms-and-conditions-acceptance>false</require-terms-and-conditions-acceptance>
+  <production-state>testing</production-state>
+  <nuxeo-validation>none</nuxeo-validation>
+  <platforms>
+    <platform>cap-7.10</platform>
+    <platform>cap-7.10*HF*</platform>
+    <platform>cap-7.10-SNAPSHOT</platform>
+    <platform>cap-7.10-RC1</platform>
+    <platform>cap-7.10-RC2</platform>
+    <platform>cap-7.10-RC3</platform>
+    <platform>cap-7.10-RC4</platform>
+    <platform>cap-7.10-RC5</platform>
+    <platform>cap-7.10-RC6</platform>
+    <platform>cap-7.10-RC7</platform>
+    <platform>cap-7.10-RC8</platform>
+    <platform>cap-7.10-RC9</platform>
+    <platform>cap-7.10-RC10</platform>
+  </platforms>
+</package>

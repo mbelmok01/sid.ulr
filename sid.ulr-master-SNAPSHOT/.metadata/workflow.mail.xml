@@ -1,0 +1,30 @@
+<mail id="workflow" version="1.2" source="NuxeoDMDefaultConfiguration_nux#1.2.0">
+  <text>&lt;HTML&gt;
+&lt;BODY&gt;
+&lt;P&gt;
+&lt;#if eventId == &quot;workflowNewProcessStarted&quot;&gt;
+Workflow started on document (UID: ${docId}) by ${author} at ${dateTime?datetime?string(&quot;dd/MM/yyyy - HH:mm&quot;)}.
+&lt;#elseif eventId == &quot;workflowProcessEnded&quot;&gt;
+Ended workflow for document (UID: ${docId}) by ${author} at ${dateTime?datetime?string(&quot;dd/MM/yyyy - HH:mm&quot;)}.
+&lt;#elseif eventId == &quot;workflowAbandoned&quot;&gt;
+Abandoned workflow for document (UID: ${docId}) by ${author} at ${dateTime?datetime?string(&quot;dd/MM/yyyy - HH:mm&quot;)}.
+&lt;#elseif eventId == &quot;workflowProcessCanceled&quot;&gt;
+Canceled workflow for document (UID: ${docId}) by ${author} at ${dateTime?datetime?string(&quot;dd/MM/yyyy - HH:mm&quot;)}.
+&lt;#elseif eventId == &quot;workflowTaskAssigned&quot;&gt;
+A task was assigned for document (UID: ${docId}) by ${author} at ${dateTime?datetime?string(&quot;dd/MM/yyyy - HH:mm&quot;)}.
+&lt;#elseif eventId == &quot;workflowTaskUnassigned&quot;&gt;
+A task was unassigned for document (UID: ${docId}) by ${author} at ${dateTime?datetime?string(&quot;dd/MM/yyyy - HH:mm&quot;)}.
+&lt;#elseif eventId == &quot;workflowTaskCompleted&quot;&gt;
+Task ended for document (UID: ${docId}) by ${author} at ${dateTime?datetime?string(&quot;dd/MM/yyyy - HH:mm&quot;)}.
+&lt;#elseif eventId == &quot;workflowTaskRemoved&quot;&gt;
+Task removed for document (UID: ${docId}) by ${author} at ${dateTime?datetime?string(&quot;dd/MM/yyyy - HH:mm&quot;)}.
+&lt;#elseif eventId == &quot;workflowTaskSuspended&quot;&gt;
+A task was suspended for document (UID: ${docId}) by ${author} at ${dateTime?datetime?string(&quot;dd/MM/yyyy - HH:mm&quot;)}.
+&lt;#elseif eventId == &quot;workflowTaskRejected&quot;&gt;
+A task was rejected for document (UID: ${docId}) by ${author} at ${dateTime?datetime?string(&quot;dd/MM/yyyy - HH:mm&quot;)}.
+&lt;/#if&gt;
+&lt;BR&gt;
+You can consult the document at the following URL: &lt;a href=&quot;${docUrl}&quot;&gt;${htmlEscape(docTitle)}&lt;/a&gt;&lt;/P&gt;
+&lt;/BODY&gt;
+&lt;HTML&gt;</text>
+</mail>

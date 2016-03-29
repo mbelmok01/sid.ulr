@@ -1,0 +1,20 @@
+<branding id="ulr-pres" version="1.2">
+  <isDisabled>true</isDisabled>
+  <isDefaultTheme>true</isDefaultTheme>
+  <isUsingFlavors>false</isUsingFlavors>
+  <logoId>logo_ulr.png</logoId>
+  <logoHeight>64</logoHeight>
+  <logoWidth>64</logoWidth>
+  <logoAlt>Université de La Rochelle</logoAlt>
+  <removeHeader>false</removeHeader>
+  <removeFooter>false</removeFooter>
+  <removeNews>false</removeNews>
+  <loginBackgroundX>0px</loginBackgroundX>
+  <loginBackgroundY>0px</loginBackgroundY>
+  <loginBoxBackgroundColor>#fff</loginBoxBackgroundColor>
+  <loginBackgroundColor>#000</loginBackgroundColor>
+  <backgroundPalettes/>
+  <fontPalettes/>
+  <borderPalettes/>
+  <colorPalettes/>
+</branding>

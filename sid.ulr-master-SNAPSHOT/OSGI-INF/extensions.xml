@@ -1,0 +1,3053 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component name="studio.extensions.sid.ulr" version="1.0.0">
+  <require>org.nuxeo.runtime.started</require>
+  <extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
+    <schema name="folder" prefix="folder" override="true" src="data/schemas/folder.xsd"/>
+    <schema name="domain_schema" prefix="domain_schema" override="true" src="data/schemas/domain_schema.xsd"/>
+    <schema name="externallink" prefix="externallink" override="true" src="data/schemas/externallink.xsd"/>
+    <schema name="file_schema" prefix="file_schema" override="true" src="data/schemas/file_schema.xsd"/>
+    <schema name="workspace_schema" prefix="workspace_schema" override="true" src="data/schemas/workspace_schema.xsd"/>
+    <schema name="DefaultContentListingInNavigation_cv" prefix="DefaultContentListingInNavigation_cv" override="true" src="data/schemas/DefaultContentListingInNavigation_cv.xsd"/>
+    <schema name="ulr_document" prefix="ulr" override="true" src="data/schemas/ulr_document.xsd"/>
+    <schema name="sid_ul_as" prefix="sid_ul_as" override="true" src="data/schemas/sid_ul_as.xsd"/>
+  </extension>
+  <extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
+    <doctype name="Folder" extends="Document">
+      <schema name="folder"/>
+      <schema name="dublincore"/>
+      <schema name="common"/>
+      <schema name="uid"/>
+      <facet name="Folderish"/>
+      <facet name="HasRelatedText"/>
+    </doctype>
+    <doctype name="Domain" extends="Folder">
+      <schema name="domain_schema"/>
+      <facet name="Orderable"/>
+      <facet name="SuperSpace"/>
+    </doctype>
+    <doctype name="ExternalLink" extends="ContextualLink">
+      <schema name="externallink"/>
+      <schema name="uid"/>
+    </doctype>
+    <doctype name="File" extends="Document">
+      <schema name="file_schema"/>
+      <schema name="dublincore"/>
+      <schema name="common"/>
+      <schema name="uid"/>
+      <schema name="file"/>
+      <schema name="files"/>
+      <schema name="ulr_document"/>
+      <facet name="Versionable"/>
+      <facet name="Publishable"/>
+      <facet name="Commentable"/>
+      <facet name="HasRelatedText"/>
+    </doctype>
+    <doctype name="Workspace" extends="Folder">
+      <schema name="workspace_schema"/>
+      <schema name="publishing"/>
+      <schema name="webcontainer"/>
+      <facet name="SuperSpace"/>
+    </doctype>
+    <doctype name="DefaultContentListingInNavigation_cv" extends="Document">
+      <facet name="ContentViewDisplay"/>
+      <schema name="DefaultContentListingInNavigation_cv"/>
+    </doctype>
+    <doctype name="sid_ul_as" extends="DefaultSearch">
+      <schema name="sid_ul_as"/>
+    </doctype>
+  </extension>
+  <extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService" point="types">
+    <types>
+      <type name="Folder">default</type>
+    </types>
+    <types>
+      <type name="Domain">default</type>
+    </types>
+    <types>
+      <type name="ExternalLink">default</type>
+    </types>
+    <types>
+      <type name="File">default</type>
+    </types>
+    <types>
+      <type name="Workspace">default</type>
+    </types>
+  </extension>
+  <extension target="org.nuxeo.ecm.platform.types.TypeService" point="types">
+    <type id="Folder" remove="true"/>
+    <type id="Folder">
+      <label>Folder</label>
+      <category>Collaborative</category>
+      <icon>/img/folder_100.png</icon>
+      <bigIcon>/img/folder_100.png</bigIcon>
+      <description></description>
+      <default-view>view_documents</default-view>
+      <subtypes>
+        <type>ExternalLink</type>
+        <type>File</type>
+        <type>Folder</type>
+        <type>Note</type>
+      </subtypes>
+      <layouts mode="create">
+        <layout>layout@Folder-create</layout>
+      </layouts>
+      <layouts mode="edit">
+        <layout>layout@Folder-edit</layout>
+      </layouts>
+      <layouts mode="view">
+        <layout>layout@Folder-view</layout>
+      </layouts>
+      <contentViews category="content">
+        <contentView showInExportView="false">DefaultContentListingInNavigation</contentView>
+      </contentViews>
+      <contentViews category="trash_content">
+        <contentView showInExportView="false">document_trash_content</contentView>
+      </contentViews>
+    </type>
+    <type id="Folder">
+      <subtypes>
+        <type>Folder</type>
+      </subtypes>
+    </type>
+    <type id="Workspace">
+      <subtypes>
+        <type>Folder</type>
+      </subtypes>
+    </type>
+    <type id="Domain" remove="true"/>
+    <type id="Domain">
+      <label>Domain</label>
+      <icon>/img/domain.gif</icon>
+      <bigIcon>/img/domain.gif</bigIcon>
+      <description></description>
+      <default-view>view_documents</default-view>
+      <layouts mode="create">
+        <layout>layout@Domain-create</layout>
+      </layouts>
+      <layouts mode="edit">
+        <layout>layout@Domain-edit</layout>
+      </layouts>
+      <layouts mode="view">
+        <layout>layout@Domain-view</layout>
+      </layouts>
+      <contentViews category="content">
+        <contentView showInExportView="false">DefaultContentListingInNavigation</contentView>
+      </contentViews>
+      <contentViews category="trash_content">
+        <contentView showInExportView="false">document_trash_content</contentView>
+      </contentViews>
+    </type>
+    <type id="Root">
+      <subtypes>
+        <type>Domain</type>
+      </subtypes>
+    </type>
+    <type id="ExternalLink" remove="true"/>
+    <type id="ExternalLink">
+      <label>Lien externe</label>
+      <category>SimpleDocument</category>
+      <icon>/img/link_web_marketing-512.png</icon>
+      <bigIcon>/img/link_web_marketing-512.png</bigIcon>
+      <description></description>
+      <default-view>view_documents</default-view>
+      <layouts mode="create">
+        <layout>layout@ExternalLink-create</layout>
+      </layouts>
+      <layouts mode="edit">
+        <layout>layout@ExternalLink-edit</layout>
+      </layouts>
+      <layouts mode="view">
+        <layout>layout@ExternalLink-view</layout>
+      </layouts>
+    </type>
+    <type id="Folder">
+      <subtypes>
+        <type>ExternalLink</type>
+      </subtypes>
+    </type>
+    <type id="Workspace">
+      <subtypes>
+        <type>ExternalLink</type>
+      </subtypes>
+    </type>
+    <type id="File" remove="true"/>
+    <type id="File">
+      <label>Document ULR</label>
+      <category>SimpleDocument</category>
+      <icon>/img/file_100.png</icon>
+      <bigIcon>/img/file_100.png</bigIcon>
+      <description></description>
+      <default-view>view_documents</default-view>
+      <layouts mode="create">
+        <layout>layout@File-create</layout>
+      </layouts>
+      <layouts mode="edit">
+        <layout>layout@File-edit</layout>
+      </layouts>
+      <layouts mode="view">
+        <layout>layout@File-view</layout>
+      </layouts>
+    </type>
+    <type id="Folder">
+      <subtypes>
+        <type>File</type>
+      </subtypes>
+    </type>
+    <type id="Workspace">
+      <subtypes>
+        <type>File</type>
+      </subtypes>
+    </type>
+    <type id="Workspace" remove="true"/>
+    <type id="Workspace">
+      <label>Workspace</label>
+      <category>Collaborative</category>
+      <icon>/img/workspace_open.gif</icon>
+      <bigIcon>/img/workspace_100.png</bigIcon>
+      <description></description>
+      <default-view>view_documents</default-view>
+      <subtypes>
+        <type>ExternalLink</type>
+        <type>File</type>
+        <type>Folder</type>
+        <type>Note</type>
+      </subtypes>
+      <layouts mode="create">
+        <layout>layout@Workspace-create</layout>
+      </layouts>
+      <layouts mode="edit">
+        <layout>layout@Workspace-edit</layout>
+      </layouts>
+      <layouts mode="view">
+        <layout>layout@Workspace-view</layout>
+      </layouts>
+      <contentViews category="content">
+        <contentView showInExportView="false">DefaultContentListingInNavigation</contentView>
+      </contentViews>
+      <contentViews category="trash_content">
+        <contentView showInExportView="false">document_trash_content</contentView>
+      </contentViews>
+    </type>
+    <type id="WorkspaceRoot">
+      <subtypes>
+        <type>Workspace</type>
+      </subtypes>
+    </type>
+    <type id="sid_ul_as">
+      <label>DefaultSearch</label>
+      <icon>/icons/search.png</icon>
+      <bigIcon>/icons/search_100.png</bigIcon>
+      <description>DefaultSearch.description</description>
+      <default-view>home_view_documents</default-view>
+      <layouts mode="any">
+        <layout>heading</layout>
+        <layout>sid_ul_as@layout</layout>
+      </layouts>
+    </type>
+  </extension>
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="actions">
+    <action id="TAB_RELATIONS">
+      <filter id="folder.deny.tab_relations">
+        <rule grant="false">
+          <type>Folder</type>
+        </rule>
+      </filter>
+    </action>
+    <action id="TAB_CONTENT_JBPM">
+      <filter id="folder.deny.tab_content_jbpm">
+        <rule grant="false">
+          <type>Folder</type>
+        </rule>
+      </filter>
+    </action>
+    <action id="TAB_RELATIONS">
+      <filter id="file.deny.tab_relations">
+        <rule grant="false">
+          <type>File</type>
+        </rule>
+      </filter>
+    </action>
+    <action id="TAB_CONTENT_JBPM">
+      <filter id="file.deny.tab_content_jbpm">
+        <rule grant="false">
+          <type>File</type>
+        </rule>
+      </filter>
+    </action>
+    <action id="TAB_FILES_EDIT">
+      <filter id="workspace.deny.tab_files_edit">
+        <rule grant="false">
+          <type>Workspace</type>
+        </rule>
+      </filter>
+    </action>
+    <action id="TAB_RELATIONS">
+      <filter id="workspace.deny.tab_relations">
+        <rule grant="false">
+          <type>Workspace</type>
+        </rule>
+      </filter>
+    </action>
+    <action id="DownloadAsPDF" label="Télécharger tout le contenu" enabled="true" order="0" type="link" immediate="false" link="#{operationActionBean.doOperation('BCDDownloadAsPDF')}">
+      <category>DOCUMENT_UPPER_ACTION</category>
+      <filter id="filter@DownloadAsPDF">
+        <rule grant="true">
+          <permission>ReadSecurity</permission>
+          <type>File</type>
+        </rule>
+        <rule grant="false">
+          <condition>document.isImmutable() || document.isProxy()</condition>
+        </rule>
+      </filter>
+    </action>
+    <action id="TAB_VIEW_FOLDERISH" link="/incl/tabs/document_view.xhtml" order="11" label="action.view.summary" icon="/icons/file.gif">
+      <category>VIEW_ACTION_LIST</category>
+      <filter id="viewTabForFolderish">
+        <rule grant="true">
+          <type>Folder</type>
+          <type>Workspace</type>
+        </rule>
+      </filter>
+    </action>
+  </extension>
+  <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager" point="layouts">
+    <layout name="layout@Folder-create">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>description</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>studio_header</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget/>
+        </row>
+      </rows>
+      <widget name="title" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:title</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+          <property name="required">true</property>
+        </properties>
+      </widget>
+      <widget name="description" type="textarea">
+        <labels>
+          <label mode="any">label.widget.ulr.description</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:description</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+        </properties>
+      </widget>
+      <widget name="studio_header" type="studio_header">
+        <labels>
+          <label mode="any">You can customize this form from Studio: Content Model&gt; Documents &gt; Folder &gt; Creation Layout</label>
+        </labels>
+        <translated>false</translated>
+        <widgetModes>
+          <mode value="create">view</mode>
+        </widgetModes>
+        <controls mode="any">
+          <control name="handleLabels">true</control>
+        </controls>
+      </widget>
+    </layout>
+    <layout name="layout@Folder-edit">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>description</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget/>
+        </row>
+      </rows>
+      <widget name="title" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:title</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+          <property name="required">true</property>
+        </properties>
+      </widget>
+      <widget name="description" type="textarea">
+        <labels>
+          <label mode="any">label.widget.ulr.description</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>dc:description</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+        </properties>
+      </widget>
+    </layout>
+    <layout name="layout@Folder-view">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>description</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget/>
+        </row>
+      </rows>
+      <widget name="title" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:title</field>
+        </fields>
+      </widget>
+      <widget name="description" type="textarea">
+        <labels>
+          <label mode="any">label.widget.ulr.description</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:description</field>
+        </fields>
+      </widget>
+    </layout>
+    <layout name="layout@Domain-create">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>description</widget>
+        </row>
+      </rows>
+      <widget name="title" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:title</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+          <property name="required">true</property>
+        </properties>
+      </widget>
+      <widget name="description" type="textarea">
+        <labels>
+          <label mode="any">label.widget.ulr.description</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:description</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+        </properties>
+      </widget>
+    </layout>
+    <layout name="layout@Domain-edit">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>description</widget>
+        </row>
+      </rows>
+      <widget name="title" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:title</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+          <property name="required">true</property>
+        </properties>
+      </widget>
+      <widget name="description" type="textarea">
+        <labels>
+          <label mode="any">label.widget.ulr.description</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:description</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+        </properties>
+      </widget>
+    </layout>
+    <layout name="layout@Domain-view">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>description</widget>
+        </row>
+      </rows>
+      <widget name="title" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:title</field>
+        </fields>
+      </widget>
+      <widget name="description" type="textarea">
+        <labels>
+          <label mode="any">label.widget.ulr.description</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:description</field>
+        </fields>
+      </widget>
+    </layout>
+    <layout name="layout@ExternalLink-create">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>description</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>link</widget>
+        </row>
+      </rows>
+      <widget name="title" type="text">
+        <labels>
+          <label mode="any">Title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:title</field>
+        </fields>
+      </widget>
+      <widget name="description" type="textarea">
+        <labels>
+          <label mode="any">Description</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:description</field>
+        </fields>
+      </widget>
+      <widget name="link" type="text">
+        <labels>
+          <label mode="any">Lien externe</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>clink:link</field>
+        </fields>
+      </widget>
+    </layout>
+    <layout name="layout@ExternalLink-edit">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>description</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>link</widget>
+        </row>
+      </rows>
+      <widget name="title" type="text">
+        <labels>
+          <label mode="any">Title</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>dc:title</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+          <property name="required">true</property>
+        </properties>
+      </widget>
+      <widget name="description" type="textarea">
+        <labels>
+          <label mode="any">Description</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>dc:description</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+        </properties>
+      </widget>
+      <widget name="link" type="template">
+        <labels>
+          <label mode="any">Link</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>clink:link</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="template">template=/incl/action/link_action_template.xhtml</property>
+          <property name="dev_template">/widgets/actions/dev/action_widget_type_dev_template.xhtml</property>
+        </properties>
+      </widget>
+    </layout>
+    <layout name="layout@ExternalLink-view">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>description</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget/>
+        </row>
+      </rows>
+      <widget name="title" type="text">
+        <labels>
+          <label mode="any">Title</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>dc:title</field>
+        </fields>
+      </widget>
+      <widget name="description" type="textarea">
+        <labels>
+          <label mode="any">Description</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>dc:description</field>
+        </fields>
+      </widget>
+    </layout>
+    <layout name="layout@File-create">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>description</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>content</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>nature</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>expired</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>reference</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>from</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>service</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>doc_type</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>responsible</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>meeting_date</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>meeting_type</widget>
+        </row>
+      </rows>
+      <widget name="title" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:title</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="Localize">true</property>
+          <property name="styleClass">dataInputText</property>
+          <property name="required">true</property>
+        </properties>
+      </widget>
+      <widget name="description" type="textarea">
+        <labels>
+          <label mode="any">label.widget.ulr.description</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:description</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+        </properties>
+      </widget>
+      <widget name="content" type="file">
+        <labels>
+          <label mode="any">label.widget.ulr.content</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>file:content</field>
+          <field>file:filename</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="required">false</property>
+          <property name="iconRendered">true</property>
+        </properties>
+      </widget>
+      <widget name="nature" type="selectOneDirectory">
+        <labels>
+          <label mode="any">label.widget.ulr.nature</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:nature</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="localize">true</property>
+          <property name="directoryName">nature</property>
+          <property name="ordering">label</property>
+          <property name="displayIdAndLabel">false</property>
+          <property name="notDisplayDefaultOption">false</property>
+          <property name="required">false</property>
+          <property name="displayObsoleteEntries">false</property>
+        </properties>
+      </widget>
+      <widget name="expired" type="datetime">
+        <labels>
+          <label mode="any">label.widget.ulr.expired</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:expired</field>
+        </fields>
+      </widget>
+      <widget name="reference" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.reference</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>ulr:reference</field>
+        </fields>
+      </widget>
+      <widget name="from" type="selectOneDirectory">
+        <labels>
+          <label mode="any">label.widget.ulr.from</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>ulr:from</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="directoryName">ulr_from</property>
+          <property name="notDisplayDefaultOption">true</property>
+          <property name="required">true</property>
+        </properties>
+      </widget>
+      <widget name="service" type="singleUserSuggestion">
+        <labels>
+          <label mode="any">label.widget.ulr.service</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>ulr:service</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="userSuggestionSearchType">GROUP_TYPE</property>
+          <property name="userSuggestionMaxSearchResults">40</property>
+        </properties>
+      </widget>
+      <widget name="doc_type" type="selectOneDirectory">
+        <labels>
+          <label mode="any">label.widget.ulr.doctype</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>ulr:doc_type</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="localize">false</property>
+          <property name="directoryName">ulr_doc_type</property>
+          <property name="ordering">label</property>
+          <property name="displayIdAndLabel">false</property>
+          <property name="notDisplayDefaultOption">true</property>
+          <property name="required">true</property>
+          <property name="displayObsoleteEntries">false</property>
+        </properties>
+      </widget>
+      <widget name="responsible" type="singleUserSuggestion">
+        <labels>
+          <label mode="any">label.widget.ulr.responsible</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>ulr:responsible</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="userSuggestionSearchType">USER_TYPE</property>
+          <property name="displayEmailInSuggestion">true</property>
+          <property name="userSuggestionMaxSearchResults">40</property>
+        </properties>
+      </widget>
+      <widget name="meeting_date" type="datetime">
+        <labels>
+          <label mode="any">label.widget.ulr.meeting.date</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>ulr:meeting_date</field>
+        </fields>
+      </widget>
+      <widget name="meeting_type" type="selectOneDirectory">
+        <labels>
+          <label mode="any">label.widget.ulr.meeting.type</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>ulr:meeting_type</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="directoryName">ulr_meting_type</property>
+        </properties>
+      </widget>
+    </layout>
+    <layout name="layout@File-edit">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>description</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>content</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>nature</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>expired</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>reference</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>from</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>service</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>doc_type</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>responsible</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>meeting_date</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>meeting_type</widget>
+        </row>
+      </rows>
+      <widget name="title" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:title</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="required">false</property>
+          <property name="disabled">false</property>
+        </properties>
+      </widget>
+      <widget name="description" type="textarea">
+        <labels>
+          <label mode="any">label.widget.ulr.description</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:description</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="required">false</property>
+          <property name="disabled">false</property>
+        </properties>
+      </widget>
+      <widget name="content" type="file">
+        <labels>
+          <label mode="any">label.widget.ulr.content</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>file:content</field>
+          <field>file:filename</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="required">false</property>
+          <property name="iconRendered">false</property>
+        </properties>
+      </widget>
+      <widget name="nature" type="selectOneDirectory">
+        <labels>
+          <label mode="any">label.widget.ulr.nature</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:nature</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="localize">true</property>
+          <property name="directoryName">nature</property>
+          <property name="ordering">label</property>
+          <property name="displayIdAndLabel">false</property>
+          <property name="notDisplayDefaultOption">false</property>
+          <property name="required">false</property>
+          <property name="displayObsoleteEntries">false</property>
+        </properties>
+      </widget>
+      <widget name="expired" type="datetime">
+        <labels>
+          <label mode="any">label.widget.ulr.expired</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:expired</field>
+        </fields>
+      </widget>
+      <widget name="reference" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.reference</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>ulr:reference</field>
+        </fields>
+      </widget>
+      <widget name="from" type="selectOneDirectory">
+        <labels>
+          <label mode="any">label.widget.ulr.from</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>ulr:from</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="directoryName">ulr_from</property>
+          <property name="notDisplayDefaultOption">true</property>
+        </properties>
+      </widget>
+      <widget name="service" type="singleUserSuggestion">
+        <labels>
+          <label mode="any">label.widget.ulr.service</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>ulr:service</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="userSuggestionSearchType">GROUP_TYPE</property>
+          <property name="userSuggestionMaxSearchResults">40</property>
+        </properties>
+      </widget>
+      <widget name="doc_type" type="selectOneDirectory">
+        <labels>
+          <label mode="any">label.widget.ulr.doctype</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>ulr:doc_type</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="directoryName">ulr_doc_type</property>
+          <property name="notDisplayDefaultOption">true</property>
+        </properties>
+      </widget>
+      <widget name="responsible" type="singleUserSuggestion">
+        <labels>
+          <label mode="any">label.widget.ulr.responsible</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>ulr:responsible</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="userSuggestionSearchType">USER_TYPE</property>
+          <property name="displayEmailInSuggestion">true</property>
+          <property name="userSuggestionMaxSearchResults">40</property>
+        </properties>
+      </widget>
+      <widget name="meeting_date" type="datetime">
+        <labels>
+          <label mode="any">label.widget.ulr.meeting.date</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>ulr:meeting_date</field>
+        </fields>
+      </widget>
+      <widget name="meeting_type" type="selectOneDirectory">
+        <labels>
+          <label mode="any">label.widget.ulr.meeting.type</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>ulr:meeting_type</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="directoryName">ulr_meting_type</property>
+        </properties>
+      </widget>
+    </layout>
+    <layout name="layout@File-view">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>created</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>modified</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>creator</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>contributors</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>lastContributor</widget>
+        </row>
+      </rows>
+      <widget name="created" type="datetime">
+        <labels>
+          <label mode="any">label.widget.ulr.createdAt</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:created</field>
+        </fields>
+      </widget>
+      <widget name="modified" type="datetime">
+        <labels>
+          <label mode="any">label.widget.ulr.lastModifiedAt</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:modified</field>
+        </fields>
+      </widget>
+      <widget name="creator" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.author</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:creator</field>
+        </fields>
+        <properties widgetMode="view">
+          <property name="escape">false</property>
+        </properties>
+      </widget>
+      <widget name="contributors" type="list">
+        <labels>
+          <label mode="any">label.widget.ulr.contributors</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:contributors</field>
+        </fields>
+        <subWidgets>
+          <widget name="sub0" type="text">
+            <labels>
+              <label mode="any"></label>
+            </labels>
+            <translated>false</translated>
+            <fields>
+              <field></field>
+            </fields>
+          </widget>
+        </subWidgets>
+      </widget>
+      <widget name="lastContributor" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.lastContributor</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:lastContributor</field>
+        </fields>
+      </widget>
+    </layout>
+    <layout name="layout@Workspace-create">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>description</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget/>
+        </row>
+      </rows>
+      <widget name="title" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:title</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+          <property name="required">true</property>
+        </properties>
+      </widget>
+      <widget name="description" type="textarea">
+        <labels>
+          <label mode="any">label.widget.ulr.description</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:description</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+        </properties>
+      </widget>
+    </layout>
+    <layout name="layout@Workspace-edit">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>description</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget/>
+        </row>
+      </rows>
+      <widget name="title" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:title</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+          <property name="required">true</property>
+        </properties>
+      </widget>
+      <widget name="description" type="textarea">
+        <labels>
+          <label mode="any">label.widget.ulr.description</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:description</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="styleClass">dataInputText</property>
+        </properties>
+      </widget>
+    </layout>
+    <layout name="layout@Workspace-view">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>description</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget/>
+        </row>
+      </rows>
+      <widget name="title" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:title</field>
+        </fields>
+      </widget>
+      <widget name="description" type="textarea">
+        <labels>
+          <label mode="any">label.widget.ulr.description</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>dc:description</field>
+        </fields>
+      </widget>
+    </layout>
+    <layout name="DefaultContentListingInNavigation_cv@cvLayout">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>system_fulltext</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>dublincore_title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+            <property name="nxl_colspan_1">1</property>
+          </properties>
+          <widget>dublincore_modified_min</widget>
+          <widget>dublincore_modified_max</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>ulr_document_doc_type</widget>
+        </row>
+      </rows>
+      <widget name="system_fulltext" type="text">
+        <labels>
+          <label mode="any">Full Text</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>DefaultContentListingInNavigation_cv:system_fulltext</field>
+        </fields>
+      </widget>
+      <widget name="dublincore_title" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>DefaultContentListingInNavigation_cv:dublincore_title</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="required">false</property>
+          <property name="disabled">false</property>
+        </properties>
+      </widget>
+      <widget name="dublincore_modified_min" type="datetime">
+        <labels>
+          <label mode="any">label.widget.ulr.modifiedFrom</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>DefaultContentListingInNavigation_cv:dublincore_modified_min</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="showsTime">false</property>
+          <property name="required">false</property>
+        </properties>
+      </widget>
+      <widget name="dublincore_modified_max" type="datetime">
+        <labels>
+          <label mode="any">label.search.and</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>DefaultContentListingInNavigation_cv:dublincore_modified_max</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="showsTime">false</property>
+          <property name="required">false</property>
+        </properties>
+      </widget>
+      <widget name="ulr_document_doc_type" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.doctype</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>DefaultContentListingInNavigation_cv:ulr_document_doc_type</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="required">false</property>
+          <property name="disabled">false</property>
+        </properties>
+      </widget>
+    </layout>
+    <layout name="DefaultContentListingInNavigation@cvListingLayout">
+      <templates>
+        <template mode="any">/layouts/layout_listing_ajax_template.xhtml</template>
+        <template mode="edit_columns">/layouts/layout_column_selection_template.xhtml</template>
+        <template mode="edit_sort_infos">/layouts/layout_sort_infos_template.xhtml</template>
+        <template mode="edit_sort_infos_map">/layouts/layout_sort_infos_template.xhtml</template>
+        <template mode="csv">/layouts/layout_listing_csv_template.xhtml</template>
+        <template mode="pdf">/layouts/layout_listing_pdf_template.xhtml</template>
+      </templates>
+      <properties mode="any">
+        <property name="showListingHeader">true</property>
+        <property name="showRowEvenOddClass">true</property>
+      </properties>
+      <properties mode="edit_columns">
+        <property name="availableElementsLabel">label.selection.availableColumns</property>
+        <property name="selectedElementsLabel">label.selection.selectedColumns</property>
+        <property name="selectedElementsHelp"></property>
+        <property name="selectSize">10</property>
+        <property name="displayAlwaysSelectedColumns">false</property>
+      </properties>
+      <properties mode="edit_sort_infos">
+        <property name="newSortInfoTemplate">#{documentSearchActions.newSortInfo}</property>
+        <property name="required">false</property>
+      </properties>
+      <properties mode="edit_sort_infos_map">
+        <property name="newSortInfoTemplate">#{documentSearchActions.newSortInfoMap}</property>
+        <property name="required">false</property>
+      </properties>
+      <columns>
+        <column name="selection" alwaysSelected="true">
+          <properties mode="any">
+            <property name="isListingSelectionBox">true</property>
+            <property name="useFirstWidgetLabelAsColumnHeader">false</property>
+            <property name="columnStyleClass">iconColumn</property>
+          </properties>
+          <properties mode="csv">
+            <property name="isHidden">true</property>
+          </properties>
+          <properties mode="pdf">
+            <property name="isHidden">true</property>
+          </properties>
+          <widget>listing_ajax_selection_box</widget>
+        </column>
+        <column name="listing_icon_type">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">Icon and document type</property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>listing_icon_type</widget>
+        </column>
+        <column name="listing_title_link">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">label.widget.ulr.title</property>
+            <property name="sortPropertyName">dc:title</property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>listing_title_link</widget>
+        </column>
+        <column name="modified">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">label.widget.ulr.modified</property>
+            <property name="sortPropertyName">dc:modified</property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>modified</widget>
+        </column>
+        <column name="lastContributor">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">label.widget.ulr.lastContributor</property>
+            <property name="sortPropertyName">dc:lastContributor</property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>lastContributor</widget>
+        </column>
+        <column name="listing_version">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">label.widget.ulr.version</property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>listing_version</widget>
+        </column>
+        <column name="listing_lifecycle">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">label.widget.ulr.state</property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>listing_lifecycle</widget>
+        </column>
+        <column name="listing_livedit_link">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">label.widget.ulr.liveEditLink</property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>listing_livedit_link</widget>
+        </column>
+        <column name="listing_lock_icon">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">Lock icon</property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>listing_lock_icon</widget>
+        </column>
+        <column name="doc_type">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">label.widget.ulr.doctype</property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>doc_type</widget>
+        </column>
+        <column name="meeting_date">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">label.widget.ulr.meeting.date</property>
+            <property name="sortPropertyName">ulr:meeting_date</property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>meeting_date</widget>
+        </column>
+        <column name="nxl_unknown_col" selectedByDefault="false">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label"></property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+        </column>
+        <column name="nxl_unknown_col_1" selectedByDefault="false">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label"></property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+        </column>
+        <column name="nxl_unknown_col_2" selectedByDefault="false">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label"></property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+        </column>
+        <column name="nxl_unknown_col_3" selectedByDefault="false">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label"></property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+        </column>
+        <column name="nxl_unknown_col_4" selectedByDefault="false">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label"></property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+        </column>
+      </columns>
+      <widget name="listing_icon_type" type="listing_icon_type">
+        <labels>
+          <label mode="any"></label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>data</field>
+          <field>data.ref</field>
+          <field>data.type</field>
+          <field>data.folder</field>
+        </fields>
+      </widget>
+      <widget name="listing_title_link" type="listing_title_link">
+        <labels>
+          <label mode="any">label.widget.ulr.title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>data</field>
+          <field>data.ref</field>
+          <field>data.dc.description</field>
+          <field>data.file.content</field>
+          <field>data.file.content.filename</field>
+        </fields>
+        <properties widgetMode="view">
+          <property name="localize">true</property>
+        </properties>
+        <properties mode="any">
+          <property name="localize">true</property>
+        </properties>
+      </widget>
+      <widget name="modified" type="datetime">
+        <labels>
+          <label mode="any">label.widget.ulr.modified</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>data['dc']['modified']</field>
+        </fields>
+      </widget>
+      <widget name="lastContributor" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.lastContributor</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>data['dc']['lastContributor']</field>
+        </fields>
+        <properties widgetMode="view">
+          <property name="localize">true</property>
+        </properties>
+        <properties mode="any">
+          <property name="localize">true</property>
+        </properties>
+      </widget>
+      <widget name="listing_version" type="listing_version">
+        <labels>
+          <label mode="any">label.widget.ulr.version</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>data</field>
+        </fields>
+      </widget>
+      <widget name="listing_lifecycle" type="listing_lifecycle">
+        <labels>
+          <label mode="any">label.widget.ulr.state</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>data.currentLifeCycleState</field>
+        </fields>
+      </widget>
+      <widget name="listing_livedit_link" type="listing_livedit_link">
+        <labels>
+          <label mode="any">label.widget.ulr.liveEditLink</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>data</field>
+        </fields>
+      </widget>
+      <widget name="listing_lock_icon" type="listing_lock_icon">
+        <labels>
+          <label mode="any"></label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>data.lock</field>
+          <field>data.lockInfo</field>
+        </fields>
+      </widget>
+      <widget name="doc_type" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.doctype</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>data['ulr']['doc_type']</field>
+        </fields>
+      </widget>
+      <widget name="meeting_date" type="datetime">
+        <labels>
+          <label mode="any">label.widget.ulr.meeting.date</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>data['ulr']['meeting_date']</field>
+        </fields>
+      </widget>
+    </layout>
+    <layout name="sid_ul_as@layout">
+      <templates>
+        <template mode="any">/layouts/sid.ulr_layout_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <properties mode="any"/>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>system_fulltext</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>dublincore_title</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>dublincore_description</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>dublincore_nature</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+            <property name="nxl_colspan_1">1</property>
+          </properties>
+          <widget>dublincore_created_min</widget>
+          <widget>dublincore_created_max</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>ecm_currentLifeCycleState</widget>
+        </row>
+        <row>
+          <properties mode="any">
+            <property name="nxl_colspan_0">1</property>
+          </properties>
+          <widget>ulr_document_doc_type</widget>
+        </row>
+      </rows>
+      <widget name="system_fulltext" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.fullText</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>sid_ul_as:system_fulltext</field>
+        </fields>
+      </widget>
+      <widget name="dublincore_title" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.title</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>sid_ul_as:dublincore_title</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="required">false</property>
+          <property name="disabled">false</property>
+        </properties>
+      </widget>
+      <widget name="dublincore_description" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.description</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>sid_ul_as:dublincore_description</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="required">false</property>
+          <property name="disabled">false</property>
+        </properties>
+      </widget>
+      <widget name="dublincore_nature" type="selectOneDirectory">
+        <labels>
+          <label mode="any">label.widget.ulr.nature</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>sid_ul_as:dublincore_nature</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="localize">true</property>
+          <property name="directoryName">nature</property>
+          <property name="ordering">label</property>
+          <property name="displayIdAndLabel">false</property>
+          <property name="notDisplayDefaultOption">false</property>
+          <property name="required">false</property>
+          <property name="displayObsoleteEntries">false</property>
+        </properties>
+      </widget>
+      <widget name="dublincore_created_min" type="datetime">
+        <labels>
+          <label mode="any">label.widget.ulr.created</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>sid_ul_as:dublincore_created_min</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="showsTime">false</property>
+          <property name="required">false</property>
+        </properties>
+      </widget>
+      <widget name="dublincore_created_max" type="datetime">
+        <labels>
+          <label mode="any">label.search.and</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>sid_ul_as:dublincore_created_max</field>
+        </fields>
+        <properties widgetMode="edit">
+          <property name="showsTime">false</property>
+          <property name="required">false</property>
+        </properties>
+      </widget>
+      <widget name="ecm_currentLifeCycleState" type="template">
+        <labels>
+          <label mode="any">label.widget.ulr.searchForDeletedDocument</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>sid_ul_as:ecm_currentLifeCycleState</field>
+        </fields>
+        <widgetModes>
+          <mode value="edit">#{nxu:test(deleteActions.trashManagementEnabled, mode, 'hidden')}</mode>
+        </widgetModes>
+        <properties widgetMode="edit">
+          <property name="template">/widgets/search_deleted_documents_widget.xhtml</property>
+        </properties>
+      </widget>
+      <widget name="ulr_document_doc_type" type="text">
+        <labels>
+          <label mode="any">label.widget.ulr.doctype</label>
+        </labels>
+        <translated>true</translated>
+        <fields>
+          <field>sid_ul_as:ulr_document_doc_type</field>
+        </fields>
+      </widget>
+    </layout>
+    <layout name="advancedSearch@listingLayout">
+      <templates>
+        <template mode="any">/layouts/layout_listing_ajax_template.xhtml</template>
+        <template mode="edit_columns">/layouts/layout_column_selection_template.xhtml</template>
+        <template mode="edit_sort_infos">/layouts/layout_sort_infos_template.xhtml</template>
+        <template mode="edit_sort_infos_map">/layouts/layout_sort_infos_template.xhtml</template>
+        <template mode="csv">/layouts/layout_listing_csv_template.xhtml</template>
+        <template mode="pdf">/layouts/layout_listing_pdf_template.xhtml</template>
+      </templates>
+      <properties mode="any">
+        <property name="showListingHeader">true</property>
+        <property name="showRowEvenOddClass">true</property>
+      </properties>
+      <properties mode="edit_columns">
+        <property name="availableElementsLabel">label.selection.availableColumns</property>
+        <property name="selectedElementsLabel">label.selection.selectedColumns</property>
+        <property name="selectedElementsHelp"></property>
+        <property name="selectSize">10</property>
+        <property name="displayAlwaysSelectedColumns">false</property>
+      </properties>
+      <properties mode="edit_sort_infos">
+        <property name="newSortInfoTemplate">#{documentSearchActions.newSortInfo}</property>
+        <property name="required">false</property>
+      </properties>
+      <properties mode="edit_sort_infos_map">
+        <property name="newSortInfoTemplate">#{documentSearchActions.newSortInfoMap}</property>
+        <property name="required">false</property>
+      </properties>
+      <columns>
+        <column name="selection" alwaysSelected="true">
+          <properties mode="any">
+            <property name="isListingSelectionBox">true</property>
+            <property name="useFirstWidgetLabelAsColumnHeader">false</property>
+            <property name="columnStyleClass">iconColumn</property>
+          </properties>
+          <properties mode="csv">
+            <property name="isHidden">true</property>
+          </properties>
+          <properties mode="pdf">
+            <property name="isHidden">true</property>
+          </properties>
+          <widget>listing_ajax_selection_box</widget>
+        </column>
+        <column name="listing_icon_type">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">Icon and document type</property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>listing_icon_type</widget>
+        </column>
+        <column name="listing_title_link">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">Title with link</property>
+            <property name="sortPropertyName">dc:title</property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>listing_title_link</widget>
+        </column>
+        <column name="listing_lock_icon">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">Lock icon</property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>listing_lock_icon</widget>
+        </column>
+        <column name="lastContributor">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">Live edit link</property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>lastContributor</widget>
+        </column>
+        <column name="listing_version">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">Version</property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>listing_version</widget>
+        </column>
+        <column name="listing_lifecycle">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">Lifecycle state</property>
+            <property name="sortPropertyName">ecm:currentLifeCycleState</property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>listing_lifecycle</widget>
+        </column>
+        <column name="subjects" selectedByDefault="false">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">Subjects</property>
+            <property name="sortPropertyName">dc:subjects</property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>subjects</widget>
+        </column>
+        <column name="rights" selectedByDefault="false">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">Rights</property>
+            <property name="sortPropertyName">dc:rights</property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>rights</widget>
+        </column>
+        <column name="modified" selectedByDefault="false">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">Modified</property>
+            <property name="sortPropertyName">dc:modified</property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>modified</widget>
+        </column>
+        <column name="studio_header" selectedByDefault="false">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label">Header</property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <widget>studio_header</widget>
+        </column>
+        <column name="nxl_unknown_col" selectedByDefault="false">
+          <properties mode="any">
+            <property name="useFirstWidgetLabelAsColumnHeader">true</property>
+            <property name="columnStyleClass"></property>
+            <property name="label"></property>
+            <property name="sortPropertyName"></property>
+          </properties>
+          <properties mode="edit_sort_infos">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+          <properties mode="edit_sort_infos_map">
+            <property name="showInSortInfoSelection">true</property>
+          </properties>
+        </column>
+      </columns>
+      <widget name="listing_icon_type" type="listing_icon_type">
+        <labels>
+          <label mode="any">Icon and document type</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>data</field>
+          <field>data.ref</field>
+          <field>data.type</field>
+          <field>data.folder</field>
+        </fields>
+      </widget>
+      <widget name="listing_title_link" type="listing_title_link">
+        <labels>
+          <label mode="any">Title with link</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>data</field>
+          <field>data.ref</field>
+          <field>data.dc.description</field>
+          <field>data.file.content</field>
+          <field>data.file.content.filename</field>
+        </fields>
+      </widget>
+      <widget name="listing_lock_icon" type="listing_lock_icon">
+        <labels>
+          <label mode="any">Lock icon</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>data.lock</field>
+          <field>data.lockInfo</field>
+        </fields>
+      </widget>
+      <widget name="lastContributor" type="text">
+        <labels>
+          <label mode="any">Live edit link</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>data['dc']['lastContributor']</field>
+        </fields>
+      </widget>
+      <widget name="listing_version" type="listing_version">
+        <labels>
+          <label mode="any">Version</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>data</field>
+        </fields>
+      </widget>
+      <widget name="listing_lifecycle" type="listing_lifecycle">
+        <labels>
+          <label mode="any">Lifecycle state</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>data.currentLifeCycleState</field>
+        </fields>
+      </widget>
+      <widget name="subjects" type="multiChainedDirectory">
+        <labels>
+          <label mode="any">Subjects</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>data['dc']['subjects']</field>
+        </fields>
+        <properties widgetMode="view">
+          <property name="localize">true</property>
+          <property name="parentDirectory">topic</property>
+          <property name="childDirectory">subtopic</property>
+        </properties>
+        <properties mode="any">
+          <property name="localize">true</property>
+          <property name="parentDirectory">topic</property>
+          <property name="childDirectory">subtopic</property>
+        </properties>
+      </widget>
+      <widget name="rights" type="text">
+        <labels>
+          <label mode="any">Rights</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>data['dc']['rights']</field>
+        </fields>
+      </widget>
+      <widget name="modified" type="datetime">
+        <labels>
+          <label mode="any">Modified</label>
+        </labels>
+        <translated>false</translated>
+        <fields>
+          <field>data['dc']['modified']</field>
+        </fields>
+      </widget>
+      <widget name="studio_header" type="studio_header">
+        <labels>
+          <label mode="any">Studio: To add new fields here: Search And Listings&gt;Advanced Search&gt;Results&gt;Advanced configuration</label>
+        </labels>
+        <translated>false</translated>
+        <controls mode="any">
+          <control name="handleLabels">true</control>
+        </controls>
+      </widget>
+    </layout>
+  </extension>
+  <extension target="org.nuxeo.ecm.core.versioning.VersioningService" point="versioningRules">
+    <versioningRule typeName="Folder">
+      <initialState major="0" minor="0"/>
+      <options lifeCycleState="*">
+        <none default="true"/>
+        <minor/>
+        <major/>
+      </options>
+    </versioningRule>
+    <versioningRule typeName="Domain">
+      <initialState major="0" minor="0"/>
+      <options lifeCycleState="*">
+        <none default="true"/>
+        <minor/>
+        <major/>
+      </options>
+    </versioningRule>
+    <versioningRule typeName="ExternalLink">
+      <initialState major="0" minor="0"/>
+      <options lifeCycleState="*">
+        <none default="true"/>
+        <minor/>
+        <major/>
+      </options>
+    </versioningRule>
+    <versioningRule typeName="File">
+      <initialState major="0" minor="0"/>
+      <options lifeCycleState="*">
+        <none default="true"/>
+        <minor/>
+        <major/>
+      </options>
+    </versioningRule>
+    <versioningRule typeName="Workspace">
+      <initialState major="0" minor="0"/>
+      <options lifeCycleState="*">
+        <none default="true"/>
+        <minor/>
+        <major/>
+      </options>
+    </versioningRule>
+  </extension>
+  <extension target="org.nuxeo.ecm.platform.jbpm.core.JbpmService" point="typeFilter">
+    <type name="Domain">
+      <processDefinition>review_parallel</processDefinition>
+      <processDefinition>review_approbation</processDefinition>
+    </type>
+    <type name="ExternalLink">
+      <processDefinition>review_parallel</processDefinition>
+      <processDefinition>review_approbation</processDefinition>
+    </type>
+    <type name="Workspace">
+      <processDefinition>review_parallel</processDefinition>
+      <processDefinition>review_approbation</processDefinition>
+    </type>
+  </extension>
+  <extension target="org.nuxeo.theme.styling.service" point="flavors">
+    <flavor name="theme_8_1" extends="default">
+      <logo>
+        <path>/img/sid_logo.png</path>
+        <previewPath>/img/sid_logo.png</previewPath>
+        <width>0</width>
+        <height>0</height>
+        <title>Nuxeo</title>
+      </logo>
+      <palettePreview>
+        <colors>
+          <color>#ffffff</color>
+          <color>#FABA00</color>
+          <color>#0084C3</color>
+          <color>#000000</color>
+          <color>#ffffff</color>
+          <color>#00a6f5</color>
+          <color>#eee</color>
+          <color>#f3f6f9</color>
+          <color>#2372b9</color>
+        </colors>
+      </palettePreview>
+      <sass append="true">
+        <import src="themes/palettes/common_variables.scss"/>
+        <import src="themes/palettes/theme_8_1_variables.scss"/>
+      </sass>
+    </flavor>
+  </extension>
+  <extension target="org.nuxeo.ecm.platform.WebResources" point="resources">
+    <resource name="theme_8_1_static.css">
+      <uri>/css/theme_8_1_static.css</uri>
+    </resource>
+  </extension>
+  <extension target="org.nuxeo.theme.styling.service" point="pages">
+    <page name="galaxy/popup">
+      <defaultFlavor>theme_8_1</defaultFlavor>
+      <resources append="true">
+        <resource>theme_8_1_static.css</resource>
+      </resources>
+    </page>
+    <page name="galaxy/print">
+      <defaultFlavor>theme_8_1</defaultFlavor>
+      <resources append="true">
+        <resource>theme_8_1_static.css</resource>
+      </resources>
+    </page>
+    <page name="admin/default">
+      <defaultFlavor>theme_8_1</defaultFlavor>
+      <resources append="true">
+        <resource>theme_8_1_static.css</resource>
+      </resources>
+    </page>
+    <page name="userCenter/default">
+      <defaultFlavor>theme_8_1</defaultFlavor>
+      <resources append="true">
+        <resource>theme_8_1_static.css</resource>
+      </resources>
+    </page>
+    <page name="search/default">
+      <defaultFlavor>theme_8_1</defaultFlavor>
+      <resources append="true">
+        <resource>theme_8_1_static.css</resource>
+      </resources>
+    </page>
+    <page name="galaxy/default">
+      <flavors append="true"/>
+      <defaultFlavor>theme_8_1</defaultFlavor>
+      <resources append="true">
+        <resource>theme_8_1_static.css</resource>
+      </resources>
+    </page>
+  </extension>
+  <extension target="org.nuxeo.ecm.platform.ui.web.auth.service.PluggableAuthenticationService" point="loginScreen">
+    <loginScreenConfig>
+      <backgroundImage>port_la_rochelle.jpg</backgroundImage>
+      <bodyBackgroundStyle>url("${org.nuxeo.ecm.contextPath}/img/port_la_rochelle.jpg")   no-repeat #000</bodyBackgroundStyle>
+      <disableBackgroundSizeCover>false</disableBackgroundSizeCover>
+      <headerStyle></headerStyle>
+      <removeNews>true</removeNews>
+      <footerStyle>display: none;</footerStyle>
+      <loginBoxBackgroundStyle>none 0 0 transparent</loginBoxBackgroundStyle>
+      <loginBoxWidth>300px</loginBoxWidth>
+      <loginButtonBackgroundColor>#ff452a</loginButtonBackgroundColor>
+      <logoUrl>${org.nuxeo.ecm.contextPath}/img/sid_logo.png</logoUrl>
+      <logoAlt>Nuxeo</logoAlt>
+      <logoWidth>0</logoWidth>
+      <logoHeight>0</logoHeight>
+    </loginScreenConfig>
+  </extension>
+  <extension target="org.nuxeo.ecm.platform.ui.web.ContentViewService" point="contentViews">
+    <contentView name="DefaultContentListingInNavigation">
+      <coreQueryPageProvider>
+        <property name="coreSession">#{documentManager}</property>
+        <whereClause>
+          <predicate parameter="ecm:fulltext" operator="=">
+            <field schema="DefaultContentListingInNavigation_cv" name="system_fulltext"/>
+          </predicate>
+          <predicate parameter="dc:title" operator="ILIKE">
+            <field schema="DefaultContentListingInNavigation_cv" name="dublincore_title"/>
+          </predicate>
+          <predicate parameter="dc:modified" operator="BETWEEN">
+            <field schema="DefaultContentListingInNavigation_cv" name="dublincore_modified_min"/>
+            <field schema="DefaultContentListingInNavigation_cv" name="dublincore_modified_max"/>
+          </predicate>
+          <predicate parameter="ulr:doc_type" operator="=">
+            <field schema="DefaultContentListingInNavigation_cv" name="ulr_document_doc_type"/>
+          </predicate>
+          <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:currentLifeCycleState != 'deleted' and ecm:parentId= ?</fixedPart>
+        </whereClause>
+        <searchDocumentType>DefaultContentListingInNavigation_cv</searchDocumentType>
+        <parameter>#{currentDocument.id}</parameter>
+        <sort column="dc:title" ascending="true"/>
+        <pageSize>10</pageSize>
+      </coreQueryPageProvider>
+      <searchLayout name="DefaultContentListingInNavigation_cv@cvLayout"/>
+      <useGlobalPageSize>true</useGlobalPageSize>
+      <refresh>
+        <event>documentChanged</event>
+        <event>documentChildrenChanged</event>
+      </refresh>
+      <cacheKey>#{currentDocument.repositoryName}_#{currentDocument.id}</cacheKey>
+      <cacheSize>10</cacheSize>
+      <selectionList>CURRENT_SELECTION</selectionList>
+      <showTitle>false</showTitle>
+      <showFilterForm>true</showFilterForm>
+      <showPageSizeSelector>true</showPageSizeSelector>
+      <showRefreshCommand>true</showRefreshCommand>
+      <actions category="CURRENT_SELECTION_LIST"/>
+      <actions category="cv_actions@DefaultContentListingInNavigation"/>
+      <resultLayouts>
+        <layout name="DefaultContentListingInNavigation@cvListingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true" showSpreadsheet="true"/>
+      </resultLayouts>
+      <resultColumns>#{searchDocument.cvd.selectedLayoutColumns}</resultColumns>
+      <resultLayout>#{searchDocument.cvd.resultLayoutName}</resultLayout>
+      <flags>
+        <flag>DOCUMENT_CONTENT</flag>
+      </flags>
+    </contentView>
+    <contentView name="default_search">
+      <title>label.search.default</title>
+      <translateTitle>true</translateTitle>
+      <genericPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider">
+        <property name="coreSession">#{documentManager}</property>
+        <whereClause>
+          <predicate parameter="ecm:fulltext" operator="FULLTEXT">
+            <field schema="sid_ul_as" name="system_fulltext"/>
+          </predicate>
+          <predicate parameter="dc:title" operator="ILIKE">
+            <field schema="sid_ul_as" name="dublincore_title"/>
+          </predicate>
+          <predicate parameter="dc:description" operator="ILIKE">
+            <field schema="sid_ul_as" name="dublincore_description"/>
+          </predicate>
+          <predicate parameter="dc:nature" operator="=">
+            <field schema="sid_ul_as" name="dublincore_nature"/>
+          </predicate>
+          <predicate parameter="dc:created" operator="BETWEEN">
+            <field schema="sid_ul_as" name="dublincore_created_min"/>
+            <field schema="sid_ul_as" name="dublincore_created_max"/>
+          </predicate>
+          <predicate parameter="ecm:currentLifeCycleState" operator="!=">
+            <field schema="sid_ul_as" name="ecm_currentLifeCycleState"/>
+          </predicate>
+          <predicate parameter="ulr:doc_type" operator="=">
+            <field schema="sid_ul_as" name="ulr_document_doc_type"/>
+          </predicate>
+          <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:currentLifeCycleState != 'deleted'</fixedPart>
+        </whereClause>
+        <searchDocumentType>sid_ul_as</searchDocumentType>
+        <sort column="dc:modified" ascending="true"/>
+        <sortInfosBinding>#{documentSearchActions.searchSortInfos}</sortInfosBinding>
+        <pageSize>10</pageSize>
+      </genericPageProvider>
+      <searchLayout name="sid_ul_as@layout"/>
+      <useGlobalPageSize>true</useGlobalPageSize>
+      <refresh>
+        <event>documentChanged</event>
+        <event>documentChildrenChanged</event>
+      </refresh>
+      <cacheKey>only_one_cache</cacheKey>
+      <cacheSize>1</cacheSize>
+      <selectionList>CURRENT_SELECTION</selectionList>
+      <showTitle>false</showTitle>
+      <showFilterForm>false</showFilterForm>
+      <showPageSizeSelector>true</showPageSizeSelector>
+      <showRefreshCommand>true</showRefreshCommand>
+      <actions category="CURRENT_SELECTION_LIST"/>
+      <actions category="cv_actions@advanced_search"/>
+      <resultLayouts>
+        <layout name="advancedSearch@listingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true" showSpreadsheet="true"/>
+      </resultLayouts>
+      <resultColumns>#{documentSearchActions.selectedLayoutColumns}</resultColumns>
+      <flags>
+        <flag>ADVANCED_SEARCH</flag>
+        <flag>SEARCH</flag>
+      </flags>
+    </contentView>
+  </extension>
+  <extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService" point="lifecycle">
+    <lifecycle name="default" defaultInitial="project">
+      <transitions>
+        <transition name="approve" destinationState="approved">
+          <description></description>
+        </transition>
+        <transition name="obsolete" destinationState="obsolete">
+          <description></description>
+        </transition>
+        <transition name="delete" destinationState="deleted">
+          <description></description>
+        </transition>
+        <transition name="backToProject" destinationState="project">
+          <description></description>
+        </transition>
+        <transition name="delete" destinationState="deleted">
+          <description></description>
+        </transition>
+        <transition name="delete" destinationState="deleted">
+          <description></description>
+        </transition>
+        <transition name="undelete" destinationState="project">
+          <description></description>
+        </transition>
+      </transitions>
+      <states>
+        <state name="project" description="Default state" initial="true">
+          <transitions>
+            <transition>approve</transition>
+            <transition>obsolete</transition>
+            <transition>delete</transition>
+          </transitions>
+        </state>
+        <state name="approved" description="Content has been approved">
+          <transitions>
+            <transition>delete</transition>
+            <transition>backToProject</transition>
+          </transitions>
+        </state>
+        <state name="obsolete" description="Content becomes obsolete">
+          <transitions>
+            <transition>delete</transition>
+          </transitions>
+        </state>
+        <state name="deleted" description="Content is in the trash (before real deletion)">
+          <transitions>
+            <transition>undelete</transition>
+          </transitions>
+        </state>
+      </states>
+    </lifecycle>
+  </extension>
+  <extension target="org.nuxeo.ecm.platform.ec.notification.service.NotificationService" point="templates">
+    <template name="appReviewStarted" src="data/templates/appReviewStarted.ftl"/>
+    <template name="defaultNotifTemplate" src="data/templates/defaultNotifTemplate.ftl"/>
+    <template name="emailDocument" src="data/templates/emailDocument.ftl"/>
+    <template name="modif" src="data/templates/modif.ftl"/>
+    <template name="publish" src="data/templates/publish.ftl"/>
+    <template name="subscriptionsUpdated" src="data/templates/subscriptionsUpdated.ftl"/>
+    <template name="workflow" src="data/templates/workflow.ftl"/>
+    <template name="workflowTaskAssigned" src="data/templates/workflowTaskAssigned.ftl"/>
+  </extension>
+  <extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="chains">
+    <chain id="BCDDownloadAsPDF">
+      <operation id="Context.FetchDocument"/>
+      <operation id="Document.GetBlobs"/>
+      <operation id="Blob.CreateZip">
+        <param type="string" name="filename">expr:@{CurrentDate.date}.pieceJointe.zip</param>
+      </operation>
+      <operation id="WebUI.DownloadFile"/>
+    </chain>
+  </extension>
+  <extension target="org.nuxeo.ecm.platform.content.template.service.ContentTemplateService" point="factoryBinding">
+    <factoryBinding name="DomainFactory" factoryName="SimpleTemplateFactory" targetType="Domain">
+      <template>
+        <templateItem typeName="WorkspaceRoot" id="workspaces" title="Workspaces" description="You can modify this automatically built structure from Studio: Content Model &gt; Structure Template &gt; DomainFactory"/>
+        <templateItem typeName="SectionRoot" id="sections" title="Sections" description="You can modify this automatically built structure from Studio: Content Model &gt; Structure Template &gt; DomainFactory"/>
+        <templateItem typeName="TemplateRoot" id="templates" title="Templates" description="Workspace Templates Root"/>
+      </template>
+    </factoryBinding>
+  </extension>
+  <extension target="org.nuxeo.ecm.directory.sql.SQLDirectoryFactory" point="directories">
+    <directory name="ulr_doc_type">
+      <schema>vocabulary</schema>
+      <dataSource>java:/nxsqldirectory</dataSource>
+      <cacheTimeout>3600</cacheTimeout>
+      <cacheMaxSize>1000</cacheMaxSize>
+      <idField>id</idField>
+      <autoincrementIdField>false</autoincrementIdField>
+      <createTablePolicy>on_missing_columns</createTablePolicy>
+      <table>studio_vocabulary_ulr_doc_type</table>
+      <dataFile>data/vocabularies/ulr_doc_type.csv</dataFile>
+    </directory>
+    <directory name="ulr_from">
+      <schema>vocabulary</schema>
+      <dataSource>java:/nxsqldirectory</dataSource>
+      <cacheTimeout>3600</cacheTimeout>
+      <cacheMaxSize>1000</cacheMaxSize>
+      <idField>id</idField>
+      <autoincrementIdField>false</autoincrementIdField>
+      <createTablePolicy>on_missing_columns</createTablePolicy>
+      <table>studio_vocabulary_ulr_from</table>
+      <dataFile>data/vocabularies/ulr_from.csv</dataFile>
+    </directory>
+    <directory name="ulr_meting_type">
+      <schema>vocabulary</schema>
+      <dataSource>java:/nxsqldirectory</dataSource>
+      <cacheTimeout>3600</cacheTimeout>
+      <cacheMaxSize>1000</cacheMaxSize>
+      <idField>id</idField>
+      <autoincrementIdField>false</autoincrementIdField>
+      <createTablePolicy>on_missing_columns</createTablePolicy>
+      <table>studio_vocabulary_ulr_meting_type</table>
+      <dataFile>data/vocabularies/ulr_meting_type.csv</dataFile>
+    </directory>
+  </extension>
+  <extension target="org.nuxeo.ecm.directory.ui.DirectoryUIManager" point="directories">
+    <directory name="ulr_doc_type" layout="vocabulary" sortField="label"/>
+    <directory name="ulr_from" layout="vocabulary" sortField="label"/>
+    <directory name="ulr_meting_type" layout="vocabulary" sortField="label"/>
+  </extension>
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="filters">
+    <filter id="create" append="true">
+      <rule grant="true">
+        <permission>AddChildren</permission>
+        <type>Folder</type>
+        <type>Domain</type>
+        <type>Workspace</type>
+        <condition>!document.isImmutable()</condition>
+        <condition>#{typeManager.getAllowedSubTypes(document.getType(), document).size() &gt; 0}</condition>
+      </rule>
+    </filter>
+    <filter id="create" append="true">
+      <rule grant="false">
+        <type>ExternalLink</type>
+        <type>File</type>
+      </rule>
+    </filter>
+  </extension>
+  <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager" point="widgettypes">
+
+    
+    <documentation>Widget types declared in studio</documentation>
+
+    
+    <widgetType name="studio_header">
+      
+      <configuration>
+        
+        <title>Header</title>
+        
+        <description>
+          The header widget just displays the widget label.
+        </description>
+        
+        <supportedModes>
+          
+          <mode>edit</mode>
+          
+          <mode>view</mode>
+        
+        </supportedModes>
+        
+        <fields>
+          
+          <list>false</list>
+          
+          <complex>false</complex>
+          
+          <supportedTypes/>
+          
+          <defaultTypes/>
+        
+        </fields>
+        
+        <handlingLabels>true</handlingLabels>
+        
+        <categories>
+          
+          <category>document</category>
+          
+          <category>studio</category>
+        
+        </categories>
+        
+        <properties>
+          
+          <layouts mode="any">
+            
+            <layout name="studio_header_widget_type_properties_any">
+              
+              <rows>
+                
+                <row>
+                  
+                  <widget>styleClass</widget>
+                
+                </row>
+                
+                <row>
+                  
+                  <widget>style</widget>
+                
+                </row>
+              
+              </rows>
+              
+              <widget name="styleClass" type="text">
+                
+                <labels>
+                  
+                  <label mode="any">Style class</label>
+                
+                </labels>
+                
+                <fields>
+                  
+                  <field>styleClass</field>
+                
+                </fields>
+              
+              </widget>
+              
+              <widget name="style" type="text">
+                
+                <labels>
+                  
+                  <label mode="any">Style</label>
+                
+                </labels>
+                
+                <fields>
+                  
+                  <field>style</field>
+                
+                </fields>
+              
+              </widget>
+            
+            </layout>
+          
+          </layouts>
+        
+        </properties>
+      
+      </configuration>
+      
+      <handler-class>
+        org.nuxeo.ecm.platform.forms.layout.facelets.plugins.TemplateWidgetTypeHandler
+      </handler-class>
+      
+      <property name="template">
+        /widgets/studio_header_widget.xhtml
+      </property>
+    
+    </widgetType>
+
+    
+    <widgetType name="filesList">
+      
+      <configuration>
+        
+        <title>Files</title>
+        
+        <description>
+          
+          <p>
+            The Files displays an editable list of files, using javascript to
+            keep the uploaded file path when adding several files in a row.
+          </p>
+          
+          <p>Items are defined using sub wigdets configuration.</p>
+          
+          <p>
+            This is actually a template widget type whose template uses a
+            &lt;nxu:inputList /&gt; tag in edit or create mode, and a table
+            iterating over items in other modes.
+          </p>
+        
+        </description>
+        
+        <categories>
+          
+          <category>document</category>
+          
+          <category>studio</category>
+        
+        </categories>
+        
+        <supportedModes>
+          
+          <mode>edit</mode>
+          
+          <mode>view</mode>
+        
+        </supportedModes>
+        
+        <acceptingSubWidgets>true</acceptingSubWidgets>
+        
+        <fields>
+          
+          <list>true</list>
+          
+          <complex>false</complex>
+          
+          <supportedTypes>
+            
+            <type>blob</type>
+          
+          </supportedTypes>
+          
+          <defaultTypes>
+            
+            <type>blob</type>
+          
+          </defaultTypes>
+        
+        </fields>
+        
+        <properties>
+          
+          <layouts mode="edit">
+            
+            <layout name="list_widget_type_properties_edit">
+              
+              <rows>
+                
+                <row>
+                  
+                  <widget>required</widget>
+                
+                </row>
+                
+                <row>
+                  
+                  <widget>diff</widget>
+                
+                </row>
+              
+              </rows>
+              
+              <widget name="required" type="checkbox">
+                
+                <labels>
+                  
+                  <label mode="any">Required</label>
+                
+                </labels>
+                
+                <fields>
+                  
+                  <field>required</field>
+                
+                </fields>
+              
+              </widget>
+              
+              <widget name="diff" type="checkbox">
+                
+                <labels>
+                  
+                  <label mode="any">Diff</label>
+                
+                </labels>
+                
+                <fields>
+                  
+                  <field>diff</field>
+                
+                </fields>
+              
+              </widget>
+            
+            </layout>
+          
+          </layouts>
+        
+        </properties>
+      
+      </configuration>
+      
+      <handler-class>
+        org.nuxeo.ecm.platform.forms.layout.facelets.plugins.ListWidgetTypeHandler
+      </handler-class>
+      
+      <property name="template">/widgets/js_files_list_widget_template.xhtml</property>
+      
+      <property name="compatTemplate">/widgets/files_list_widget_template.xhtml</property>
+    
+    </widgetType>
+
+  
+  </extension>
+</component>

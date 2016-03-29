@@ -1,0 +1,91 @@
+<vocabulary id="ulr_doc_type" version="1.2">
+  <content>
+    <string-array>
+      <string>other</string>
+      <string>Autre</string>
+      <string>0</string>
+      <string>14</string>
+    </string-array>
+    <string-array>
+      <string>appel_offre</string>
+      <string>Appel d&apos;offre - Appel à projets</string>
+      <string>0</string>
+      <string>1</string>
+    </string-array>
+    <string-array>
+      <string>arrete_decision</string>
+      <string>Arrété ou Décision</string>
+      <string>0</string>
+      <string>2</string>
+    </string-array>
+    <string-array>
+      <string>communique</string>
+      <string>Communiqué</string>
+      <string>0</string>
+      <string>3</string>
+    </string-array>
+    <string-array>
+      <string>compte_rendu</string>
+      <string>Compte Rendu - Procès Verbal</string>
+      <string>0</string>
+      <string>4</string>
+    </string-array>
+    <string-array>
+      <string>convention_contrat</string>
+      <string>Convention - Contrat</string>
+      <string>0</string>
+      <string>5</string>
+    </string-array>
+    <string-array>
+      <string>formulaire</string>
+      <string>Imprimé - Formulaire</string>
+      <string>0</string>
+      <string>6</string>
+    </string-array>
+    <string-array>
+      <string>lettre_admin</string>
+      <string>Lettre Administrative</string>
+      <string>0</string>
+      <string>7</string>
+    </string-array>
+    <string-array>
+      <string>memo</string>
+      <string>Mémo</string>
+      <string>0</string>
+      <string>8</string>
+    </string-array>
+    <string-array>
+      <string>note_de_service</string>
+      <string>Note de service</string>
+      <string>0</string>
+      <string>9</string>
+    </string-array>
+    <string-array>
+      <string>rapport_activite</string>
+      <string>Rapport d&apos;activié</string>
+      <string>0</string>
+      <string>10</string>
+    </string-array>
+    <string-array>
+      <string>tableau_de_bord</string>
+      <string>Tableau de bord</string>
+      <string>0</string>
+      <string>11</string>
+    </string-array>
+    <string-array>
+      <string>circulaire</string>
+      <string>Note ou Circulaire du Ministère</string>
+      <string>0</string>
+      <string>12</string>
+    </string-array>
+    <string-array>
+      <string>these</string>
+      <string>Thèse</string>
+      <string>0</string>
+      <string>13</string>
+    </string-array>
+  </content>
+  <isHierarchical>false</isHierarchical>
+  <numberOfLevels>0</numberOfLevels>
+  <createTablePolicy>on_missing_columns</createTablePolicy>
+</vocabulary>

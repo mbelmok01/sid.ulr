@@ -1,0 +1,19 @@
+ <f:subview xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:nxdir="http://nuxeo.org/nxdirectory"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:nxl="http://nuxeo.org/nxforms/layout" id="#{widget.id}">
+  
+  <c:if test="#{layout.mode != 'edit' and layout.mode != 'create'}">
+	  <h:outputLink value="#{field}" target="_blank">
+	    <h:outputText value="#{field}" />
+	  </h:outputLink>
+	</c:if>
+	
+	<c:if test="#{layout.mode == 'edit' or layout.mode == 'create'}">
+		<h:inputText class="dataInputText" value="#{field}" />
+	</c:if>
+
+</f:subview>

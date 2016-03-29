@@ -1,0 +1,28 @@
+<action-extension id="DownloadAsPDF" version="1.2">
+  <model>
+    <category>DOCUMENT_UPPER_ACTION</category>
+    <label>Télécharger tout le contenu</label>
+    <order>0</order>
+    <immediate>false</immediate>
+    <chain>BCDDownloadAsPDF</chain>
+    <rules>
+      <rules>
+        <org.nuxeo.studio.client.modules.action.RuleModel>
+          <key>hasPermission</key>
+          <operator>==</operator>
+          <value>ReadSecurity</value>
+        </org.nuxeo.studio.client.modules.action.RuleModel>
+        <org.nuxeo.studio.client.modules.action.RuleModel>
+          <key>hasType</key>
+          <operator>==</operator>
+          <value>File</value>
+        </org.nuxeo.studio.client.modules.action.RuleModel>
+        <org.nuxeo.studio.client.modules.action.RuleModel>
+          <key>hasAttribute</key>
+          <operator>==</operator>
+          <value>Regular Document</value>
+        </org.nuxeo.studio.client.modules.action.RuleModel>
+      </rules>
+    </rules>
+  </model>
+</action-extension>

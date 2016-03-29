@@ -1,0 +1,7 @@
+<mail id="appReviewStarted" version="1.2">
+  <text>Bonjour,
+
+${workflowInitiator} vous propose le document &quot;${workflowDocuments[0].dublincore.title}.
+
+Vous pouvez le publier en suivant ce lien vers la plateforme documentaire : ${docMainFileUrl}</text>
+</mail>
